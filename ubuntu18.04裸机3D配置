@@ -1,0 +1,65 @@
+根据《视觉SLAM十四讲》，在Ubuntu18.04上安装以下工具包：
+1.安装g++，Cmake，git
+sudo apt-get install g++
+sudo apt-get install cmake
+sudo apt-get install git
+
+2.安装Eigen3
+sudo apt-get install libeigen3-dev
+
+3.安装opengl
+sudo apt-get install libgl1-mesa-dev
+sudo apt-get install freeglut3-dev
+sudo apt-get install libglew-dev
+
+4.安装anaconda3
+./Anaconda3-4.2.0-Linux-x86_64
+
+5.安装Pangolin 
+依赖
+cd Pangolin
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+
+6.安装Sophus
+依赖
+cd Sophus
+mkdir build
+cd build
+cmake ..
+make 
+sudo make install
+
+7.安装opencv3.1.0
+sudo apt-get install build-essential libgtk2.0-dev libvtk6-dev libjpeg-dev libtiff5-dev libjasper-dev libopenexr libtbb-dev
+cd opencv-3.1.0
+mkdir build
+cd build
+cmake ..
+解决ippicv问题: https://blog.csdn.net/wolfcsharp/article/details/110127158 
+重新cmake -D ENABLE_PRECOMPILED_HEADERS=OFF ..
+make
+sudo make install
+
+8.安装Ceres
+sudo apt-get install liblapack-dev libsuitesparse-dev libcxsparse3 libgflags-dev libgoogle-glog-dev libgtest-dev
+cd ceres-solver
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+
+9.安装g2o
+sudo apt-get install qt5-qmake qt5-default libqglviewer-dev-qt5 libcxsparse3 libcholmod3
+cd g2o
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+
+
