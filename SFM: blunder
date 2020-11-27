@@ -1,1 +1,48 @@
-# blunder 实践
+#SFM实践(blunder PMVS-CMVS)
+(一)安装blunder和PMVS-CMVS
+1.安装依赖
+(1)安装blunder依赖
+sudo apt-get install liblapack-dev libblas-dev minpack-dev f2c gfortran jhead imagemagick
+(2)安装SIFT依赖
+sudo apt-get install libc6-dev-i386
+(3)安装PMVS&CMVS依赖
+sudo apt-get install libgtk2.0-dev libdevil-dev libboost-all-dev libatlas-cpp-0.6-dev libatlas-dev libcminpack-dev libgfortran3 libmetis-edf-dev libparmetis-dev freeglut3-dev libgsl0-dev
+
+2.下载SIFT
+http://www.cs.ubc.ca/~lowe/keypoints/
+得到siftDemoV4.zip，解压，将其中的sift可执行文件复制到blundler_sfm-master/bin/下
+
+3.编译bundler
+cd blundler_sfm-master/
+make
+#将jhead文件拷贝到bundler_sfm-MASTER下的bin目录下再make
+sudo cp /usr/bin/jhead bin/
+make
+#将bundler_sfm-master/bin/目录下生成的libANN_char.so文件拷贝到系统库
+sudo cp bin/libANN_char.so /usr/lib/
+
+4.编译CMVS-PMVS
+cd CMVS-PMVS
+mkdir build
+cd build
+cmake ..
+make
+#从build/main下将生成的可执行文件cmvs、genOption、pmvs2复制到bundler_sfm-master/bin/下
+
+
+
+(二)执行Bundler稀疏重建
+cd blundler_sfm-master/example/ET
+../../RunBundler.sh
+将在bundler文件夹下的bundler.out中存储了重建的稀疏点3D坐标和相机参数
+
+(三)执行CMVS-PMVS稠密重建
+#将Bundler的输出转换为CMVS-PMVS的输入格式
+../../bin/Bundle2PMVS prepare/list.txt bundle/bundle.out
+#此时会生成blundler_sfm-master/example/ET/pmvs文件夹
+#修改pmvs/prep_pmvs.sh文件,使BUNDLER_BIN_PATH=../../bin
+bash pmvs/prep_pmvs.sh
+../../bin/cmvs pmvs/
+../../bin/genOption pmvs/
+../../bin/pmvs2 pmvs/ option-0000
+生成的最终结果位于pmvs目录的models 文件夹下，名称为option-0000.ply
