@@ -1,0 +1,12 @@
+#create linemod dataset using ObjectDatasetTools
+#https://github.com/F2Wang/ObjectDatasetTools
+按照https://github.com/F2Wang/ObjectDatasetTools/blob/master/doc/installation.md在Ubuntu16.04上安装
+
+#采集数据
+python record2.py LINEMOD/jsq
+#计算图片之间的位姿变化
+python compute_gt_poses.py LINEMOD/jsq
+#场景重建
+python register_scene.py LINEMOD/jsq
+#分割重建
+python register_segmented.py LINEMOD/jsq
