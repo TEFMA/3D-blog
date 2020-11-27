@@ -1,0 +1,39 @@
+#第三方学习资料：https://www.cnblogs.com/MingruiYu/tag/ORB-SLAM2/
+#orb-slam2需要的依赖我们在《视觉SLAM十四讲》中已经全部安装好
+
+
+#非ROS版本
+cd ORB_SLAM2-master
+chmod +x build.sh
+./build.sh
+#遇到usleep的问题，参考https://github.com/raulmur/ORB_SLAM2/issues/337#issuecomment-373945348解决，即在/include/System.h文件中添加头文件<unistd.h>即可
+#又遇到c++: internal compiler error: Killed(program cc1plus),参考https://github.com/raulmur/ORB_SLAM2/issues/242#issuecomment-276122062解决，将build.sh中的make -j改成make
+#单目示例
+下载https://vision.in.tum.de/data/datasets/rgbd-dataset/download中TUM数据集中的fr1/desk,解压到与ORB_SLAM2-master同级文件夹下
+./Examples/Monocular/mono_tum Vocabulary/ORBvov.txt Examples/Monocular/TUM1.yaml ../rgbd_dataset_freiburg1_desk
+#RGBD示例
+./Examples/RGB-D/rgbd_tum Vocabulary/ORBvov.txt Examples/RGB-D/TUM1.yaml ../rgbd_dataset_freiburg1_desk ./Examples/RGB-D/associations/fr1_desk.txt
+
+
+
+#ROS版本
+D435i SDK安装:
+sudo apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
+sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo bionic main" -u
+sudo apt-get install librealsense2-dkms
+sudo apt-get install librealsense2-utils
+#测试安装成功
+realsense-viewer
+#安装dev package，With dev package installed, you can compile an application with librealsense using g++ -std=c++11 filename.cpp -lrealsense2 or an IDE of your choice.
+sudo apt-get install librealsense2-dev
+sudo apt-get install librealsense2-dbg
+#测试kernel is updated
+modinfo uvcvideo | grep "version:"should include realsense string
+
+
+
+
+
+
+
+
