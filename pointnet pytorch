@@ -1,0 +1,17 @@
+#实现pointnet基于pytorch
+#github地址： https://github.com/fxia22/pointnet.pytorch
+#创建虚拟环境
+conda create -n pointnet python=3.5
+#安装torch1.0.1和torchvison0.2.2.post2
+参考csdn博客： https://blog.csdn.net/wolfcsharp/article/details/107474382
+#安装其他库
+cd pointnet.pytorch-master
+pip install -e .
+#准备数据集和可视化工具
+cd script
+bash build.sh #build C++ code for visualization
+bash download.sh #download dataset
+#点云分类训练
+python train_classification.py --dataset ../shapenetcore_partanno_segmentation_benchmark_v0 --nepoch=10 --dataset_type shapenet
+#点云分割训练
+python train_segmentation.py --dataset ../shapenetcore_partanno_segmentation_benchmark_v0/ --nepoch=10
