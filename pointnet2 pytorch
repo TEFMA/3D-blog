@@ -21,7 +21,7 @@ python test_cls.py --normal --log_dir pointnet2_cls_msg
 
 
 ##点云部分分割
-#准备shapenet数据集，实际测试无法下载数据2020.11.30
+#准备shapenet数据集
 https://shapenet.cs.stanford.edu/media/shapenetcore_partanno_segmentation_benchmark_v0_normal.zip
 将其放在data/shapenetcore_partanno_segmentation_benchmark_v0_normal/中
 #Check model in ./models，在其中找一个想用的模型
@@ -31,9 +31,9 @@ python train_partseg.py --model pointnet2_part_seg_msg --normal --log_dir pointn
 python test_partseg.py --normal --log_dir pointnet2_part_seg_msg
 
 
-
+TODO：
 ##点云语义分割
-#准备S3DIS
+#准备S3DIS，实际测试无法下载数据2020.11.30
 http://buildingparser.stanford.edu/dataset.html
 将其放在data/Stanford3dDataset_v1.2_Aligned_Version/中
 #数据预处理
