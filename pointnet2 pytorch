@@ -13,30 +13,33 @@ pip install tqdm
 #准备modelnet数据集
 https://shapenet.cs.stanford.edu/media/modelnet40_normal_resampled.zip
 将其放在data/modelnet40_normal_resampled/中，其中data文件夹需要自己创建
-#
-#
-python train_cls.py --model pointnet2_cls_msg --normal --log_dir pointnet2_cls_msg
-#
+#Check model in ./models，在其中找一个想用的模型
+#分类训练
+python train_cls.py --model pointnet2_cls_msg --normal --log_dir pointnet2_cls_msg --batch_size 12
+#分类测试
 python test_cls.py --normal --log_dir pointnet2_cls_msg
 
 
 ##点云部分分割
 #准备shapenet数据集
 https://shapenet.cs.stanford.edu/media/shapenetcore_partanno_segmentation_benchmark_v0_normal.zip
-将其放在data/shapenetcore_partanno_segmentation_benchmark_v0_normal/
-#
-#
+将其放在data/shapenetcore_partanno_segmentation_benchmark_v0_normal/中
+#Check model in ./models，在其中找一个想用的模型
+#部分分割训练
 python train_partseg.py --model pointnet2_part_seg_msg --normal --log_dir pointnet2_part_seg_msg
-#
+#部分分割测试
 python test_partseg.py --normal --log_dir pointnet2_part_seg_msg
+
+
 
 ##点云语义分割
 #准备S3DIS
-
-#
-#
+http://buildingparser.stanford.edu/dataset.html
+将其放在data/Stanford3dDataset_v1.2_Aligned_Version/中
+#Check model in ./models，在其中找一个想用的模型
+#语义分割训练
 python train_semseg.py --model pointnet2_sem_seg --test_area 5 --log_dir pointnet2_sem_seg
-#
+#语义分割测试
 python test_semseg.py --log_dir pointnet2_sem_seg --test_area 5 --visual
 
 
