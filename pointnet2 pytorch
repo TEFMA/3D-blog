@@ -21,7 +21,7 @@ python test_cls.py --normal --log_dir pointnet2_cls_msg
 
 
 ##点云部分分割
-#准备shapenet数据集
+#准备shapenet数据集，实际测试无法下载数据2020.11.30
 https://shapenet.cs.stanford.edu/media/shapenetcore_partanno_segmentation_benchmark_v0_normal.zip
 将其放在data/shapenetcore_partanno_segmentation_benchmark_v0_normal/中
 #Check model in ./models，在其中找一个想用的模型
