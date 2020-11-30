@@ -14,6 +14,8 @@ https://shapenet.cs.stanford.edu/media/modelnet40_normal_resampled.zip
 
 ##点云部分分割
 #准备shapenet数据集
+https://shapenet.cs.stanford.edu/media/shapenetcore_partanno_segmentation_benchmark_v0_normal.zip
+将其放在data/shapenetcore_partanno_segmentation_benchmark_v0_normal/
 
 
 ##点云语义分割
