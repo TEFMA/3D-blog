@@ -1,0 +1,47 @@
+#pragma warning(disable:4996)
+#include<iostream>
+#include<opencv2/opencv.hpp>
+#include<pcl/io/ply_io.h>
+#include<pcl/io/pcd_io.h>
+
+using namespace std;
+using namespace cv;
+using namespace pcl;
+
+string RGB_img_path =  "rgb.jpg";
+string depth_img_path =  "depth.png";
+
+//定义相机内参
+double cx = 650.7; 
+double cy = 352.941;
+double fx = 916.28;
+double fy = 916.088;
+double depthScale = 1000.0;
+
+
+int main()
+{
+  Mat RGB_img = imread(RGB_img_path);
+  Mat depth_image = imread(depth_img_path,-1);// 使用-1读取原始图像
+  pcl::PointCloud<pcl::PointXYZRGB> point_cloud;
+  for (int v = 0; v < RGB_img.rows; v++)
+  {
+	for (int u = 0; u < RGB_img.cols; u++)
+    {
+      unsigned int d = depth_image.ptr<unsigned short>(v)[u];
+	  //cout << d << endl;
+      if(d==0)continue;
+      pcl::PointXYZRGB point;
+      point.z = double(d) / depthScale;
+      point.x = (u-cx) * point.z / fx;
+      point.y = (v-cy) * point.z / fy;
+	  point.r = RGB_img.data[v * RGB_img.step + u * RGB_img.channels()];
+	  point.g = RGB_img.data[v * RGB_img.step + u * RGB_img.channels() + 1];
+	  point.b = RGB_img.data[v * RGB_img.step + u * RGB_img.channels() + 2];
+      point_cloud.points.push_back(point);
+    }
+  }
+
+  pcl::io::savePLYFile("point_cloud.ply", point_cloud);
+  //pcl::io::savePCDFile("point_cloud.pcd", point_cloud);
+}
