@@ -1,0 +1,113 @@
+#pragma warning(disable:4996)
+#include <iostream>
+#include <librealsense2/rs.hpp> // Include RealSense Cross Platform API
+
+rs2::pipeline pipe;
+rs2::config cfg;
+
+
+// This example assumes camera with depth and color
+// streams, and direction lets you define the target stream
+enum class direction
+{
+	to_depth,
+	to_color
+};
+
+
+//获取realsense相机的内参
+//by Leo Ma at G205
+//2020.11.02
+void get_intrinsics(int &width, int &height, float &fx, float &fy, float &cx, float &cy)
+{
+	rs2::align align_to_depth(RS2_STREAM_DEPTH);
+	rs2::align align_to_color(RS2_STREAM_COLOR);
+	// set alignment direction
+	direction   dir = direction::to_color;
+	rs2::frameset frameset = pipe.wait_for_frames();
+	// Using the align object, we block the application until a frameset is available
+	for (int i = 0; i < 30; i++)
+	{
+		frameset = pipe.wait_for_frames();
+	}
+	//align
+	if (dir == direction::to_depth)
+	{
+		// Align all frames to depth viewport
+		frameset = align_to_depth.process(frameset);
+	}
+	else
+	{
+		// Align all frames to color viewport
+		frameset = align_to_color.process(frameset);
+	}
+
+
+	// With the aligned frameset we proceed as usual
+	rs2::depth_frame depth = frameset.get_depth_frame(); ///获取深度图像数据
+	rs2::video_frame color = frameset.get_color_frame();  ///获取彩色图像数据
+	rs2::stream_profile dprofile = depth.get_profile();
+	rs2::stream_profile cprofile = color.get_profile();
+
+	///获取彩色相机内参
+	rs2::video_stream_profile cvsprofile(cprofile);
+	rs2_intrinsics color_intrin = cvsprofile.get_intrinsics();
+	width = color_intrin.width;
+	height = color_intrin.height;
+	fx = color_intrin.fx;
+	fy = color_intrin.fy;
+	cx = color_intrin.ppx;
+	cy = color_intrin.ppy;
+
+	std::cout << "\ncolor intrinsics: ";
+	std::cout << color_intrin.width << "  " << color_intrin.height << "  ";
+	std::cout << color_intrin.ppx << "  " << color_intrin.ppy << "  ";
+	std::cout << color_intrin.fx << "  " << color_intrin.fy << std::endl;
+	std::cout << "coeffs: ";
+	for (auto value : color_intrin.coeffs)
+		std::cout << value << "  ";
+	std::cout << std::endl;
+	std::cout << "distortion model: " << color_intrin.model << std::endl;///畸变模型
+	/*
+	///获取深度相机内参
+	rs2::video_stream_profile dvsprofile(dprofile);
+	rs2_intrinsics depth_intrin = dvsprofile.get_intrinsics();
+	std::cout << "\ndepth intrinsics: ";
+	std::cout << depth_intrin.width << "  " << depth_intrin.height << "  ";
+	std::cout << depth_intrin.ppx << "  " << depth_intrin.ppy << "  ";
+	std::cout << depth_intrin.fx << "  " << depth_intrin.fy << std::endl;
+	std::cout << "coeffs: ";
+	for (auto value : depth_intrin.coeffs)
+		std::cout << value << "  ";
+	std::cout << std::endl;
+	std::cout << "distortion model: " << depth_intrin.model << std::endl;///畸变模型
+
+	///获取深度相机相对于彩色相机的外参，即变换矩阵: P_color = R * P_depth + T
+	rs2_extrinsics extrin = dprofile.get_extrinsics_to(cprofile);
+	std::cout << "\nextrinsics of depth camera to color camera: \nrotaion: " << std::endl;
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			float value = extrin.rotation[3 * i + j];
+			std::cout << value << "  ";
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+
+	std::cout << "translation: ";
+	for (auto value : extrin.translation)
+		std::cout << value << "  ";
+	std::cout << std::endl;
+	*/
+}
+int main()
+{
+	cfg.enable_stream(RS2_STREAM_DEPTH);
+	cfg.enable_stream(RS2_STREAM_COLOR);
+	pipe.start(cfg);
+
+	int width, height;
+	float fx, fy, cx, cy;
+	get_intrinsics(width, height, fx, fy, cx, cy);
+	system("pause");
+}
