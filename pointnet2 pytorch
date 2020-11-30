@@ -1,0 +1,20 @@
+#实现pointnet++基于pytorch
+#github地址： https://github.com/yanx27/Pointnet_Pointnet2_pytorch
+#创建虚拟环境
+conda create -n pointnet2 python=3.6.7
+#安装torch1.1.0和torchvison0.3.0
+参考csdn博客： https://blog.csdn.net/wolfcsharp/article/details/107474382
+
+
+##点云分类
+#准备modelnet数据集
+https://shapenet.cs.stanford.edu/media/modelnet40_normal_resampled.zip
+将其放在data/modelnet40_normal_resampled/中，其中data文件夹需要自己创建
+#
+
+##点云部分分割
+#准备shapenet数据集
+
+
+##点云语义分割
+#准备S3DIS
