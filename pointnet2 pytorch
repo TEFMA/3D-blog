@@ -36,6 +36,10 @@ python test_partseg.py --normal --log_dir pointnet2_part_seg_msg
 #准备S3DIS
 http://buildingparser.stanford.edu/dataset.html
 将其放在data/Stanford3dDataset_v1.2_Aligned_Version/中
+#数据预处理
+cd data_utils
+python collect_indoor3d_data.py
+结果将会被存在data/stanford_indoor3d/中
 #Check model in ./models，在其中找一个想用的模型
 #语义分割训练
 python train_semseg.py --model pointnet2_sem_seg --test_area 5 --log_dir pointnet2_sem_seg
