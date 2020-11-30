@@ -26,7 +26,7 @@ https://shapenet.cs.stanford.edu/media/shapenetcore_partanno_segmentation_benchm
 将其放在data/shapenetcore_partanno_segmentation_benchmark_v0_normal/中
 #Check model in ./models，在其中找一个想用的模型
 #部分分割训练
-python train_partseg.py --model pointnet2_part_seg_msg --normal --log_dir pointnet2_part_seg_msg
+python train_partseg.py --model pointnet2_part_seg_msg --normal --log_dir pointnet2_part_seg_msg --batch_size 12
 #部分分割测试
 python test_partseg.py --normal --log_dir pointnet2_part_seg_msg
 
