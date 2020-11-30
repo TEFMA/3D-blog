@@ -4,6 +4,9 @@
 conda create -n pointnet2 python=3.6.7
 #安装torch1.1.0和torchvison0.3.0
 参考csdn博客： https://blog.csdn.net/wolfcsharp/article/details/107474382
+#安装tdqm
+pip install tqdm
+
 
 
 ##点云分类
@@ -11,12 +14,31 @@ conda create -n pointnet2 python=3.6.7
 https://shapenet.cs.stanford.edu/media/modelnet40_normal_resampled.zip
 将其放在data/modelnet40_normal_resampled/中，其中data文件夹需要自己创建
 #
+#
+python train_cls.py --model pointnet2_cls_msg --normal --log_dir pointnet2_cls_msg
+#
+python test_cls.py --normal --log_dir pointnet2_cls_msg
+
 
 ##点云部分分割
 #准备shapenet数据集
 https://shapenet.cs.stanford.edu/media/shapenetcore_partanno_segmentation_benchmark_v0_normal.zip
 将其放在data/shapenetcore_partanno_segmentation_benchmark_v0_normal/
-
+#
+#
+python train_partseg.py --model pointnet2_part_seg_msg --normal --log_dir pointnet2_part_seg_msg
+#
+python test_partseg.py --normal --log_dir pointnet2_part_seg_msg
 
 ##点云语义分割
 #准备S3DIS
+
+#
+#
+python train_semseg.py --model pointnet2_sem_seg --test_area 5 --log_dir pointnet2_sem_seg
+#
+python test_semseg.py --log_dir pointnet2_sem_seg --test_area 5 --visual
+
+
+
+
