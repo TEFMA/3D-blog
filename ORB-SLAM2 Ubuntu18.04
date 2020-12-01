@@ -30,6 +30,10 @@ sudo apt-get install librealsense2-dbg
 #测试kernel is updated
 modinfo uvcvideo | grep "version:"should include realsense string
 
+#安装ROS melodic
+参照wiki.ros.org/melodic/Installation/Ubuntu在ubuntu18.04上安装
+在安装之前添加清华源：sudo sh -c '. /etc/lsb-release && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list'
+
 
 
 
