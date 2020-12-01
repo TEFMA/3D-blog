@@ -12,6 +12,7 @@ string RGB_img_path =  "rgb.jpg";
 string depth_img_path =  "depth.png";
 
 //定义相机内参
+
 double cx = 650.7; 
 double cy = 352.941;
 double fx = 916.28;
@@ -41,7 +42,8 @@ int main()
       point_cloud.points.push_back(point);
     }
   }
-
+  point_cloud.width = point_cloud.points.size();
+  point_cloud.height = 1;
   pcl::io::savePLYFile("point_cloud.ply", point_cloud);
-  //pcl::io::savePCDFile("point_cloud.pcd", point_cloud);
+  pcl::io::savePCDFile("point_cloud.pcd", point_cloud);
 }
