@@ -36,7 +36,7 @@ int main()
       point.z = double(d) / depthScale;
       point.x = (u-cx) * point.z / fx;
       point.y = (v-cy) * point.z / fy;
-	  point.r = RGB_img.data[v * RGB_img.step + u * RGB_img.channels()];//RGB_img.step = RGB_img.cols*RGB_img.channels()
+	  point.r = RGB_img.data[v * RGB_img.step + u * RGB_img.channels()];//RGB_img.step = RGB_img.step[0] = RGB_img.cols*RGB_img.channels()
 	  point.g = RGB_img.data[v * RGB_img.step + u * RGB_img.channels() + 1];
 	  point.b = RGB_img.data[v * RGB_img.step + u * RGB_img.channels() + 2];
       point_cloud.points.push_back(point);
