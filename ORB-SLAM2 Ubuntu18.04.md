@@ -107,8 +107,8 @@ realsense-viewer
 ```
 3.安装dev package，With dev package installed, you can compile an application with librealsense using g++ -std=c++11 filename.cpp -lrealsense2 or an IDE of your choice.  <br/>
 ```
-sudo apt-get install librealsense2-dev  <br/>
-sudo apt-get install librealsense2-dbg  <br/>
+sudo apt-get install librealsense2-dev
+sudo apt-get install librealsense2-dbg
 ```
 
 
