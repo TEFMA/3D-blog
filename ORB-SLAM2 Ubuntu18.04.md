@@ -74,14 +74,16 @@ sudo apt-get install ros-melodic-usb-cam
 </launch>
 ```
 ### 运行单目SLAM
-**1.终端1**
-```roscore```
-**2.终端2**
+1.终端1
+```
+roscore
+```
+2.终端2
 ```
 cd ORB_SLAM2-master
 roslaunch usb_cam_node.launch
 ```
-**3.终端3**
+3.终端3
 ```
 rosrun ORB_SLAM2 Mono /home/leo/SLAM/src/ORB_SLAM2/Vocabulary/ORBvoc.txt /home/leo/SLAM/src/ORB_SLAM2/Examples/ROS/ORB_SLAM2/Asus.yaml
 ``` 
