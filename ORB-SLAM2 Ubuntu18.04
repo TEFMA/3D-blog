@@ -33,9 +33,24 @@ modinfo uvcvideo | grep "version:"should include realsense string
 #安装ROS melodic
 参照wiki.ros.org/melodic/Installation/Ubuntu在ubuntu18.04上安装
 在安装之前添加清华源：sudo sh -c '. /etc/lsb-release && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list'
+#ROS建立SLAM工作空间
+mkdir -p ~/SLAM/src
+cd ~/SLAM/src
+catkin_init_workspace
+cd ..
+catkin_make
+echo "source ~/SLAM/devel/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+#将ORB_SLAM2-master.zip解压到~/SLAM/src中
 
+【ORB-SLAM2】（三）：单目摄像头+ROS+ORB_SLAM2实时测试
+https://blog.csdn.net/zhuiqiuzhuoyue583/article/details/107394461
+ORB-SLAM2(3) ROS下实时跑ORB_SLAM2
+https://www.cnblogs.com/kekeoutlook/p/7693129.html
+ORB-SLAM2中ROS+RGBD运行实例
+https://blog.csdn.net/qq_38589460/article/details/82708166
 
-
+https://github.com/raulmur/ORB_SLAM2
 
 
 
