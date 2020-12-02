@@ -25,10 +25,7 @@ sudo apt-get install librealsense2-utils
 #测试安装成功
 realsense-viewer
 #安装dev package，With dev package installed, you can compile an application with librealsense using g++ -std=c++11 filename.cpp -lrealsense2 or an IDE of your choice.
-sudo apt-get install librealsense2-dev
-sudo apt-get install librealsense2-dbg
-#测试kernel is updated
-modinfo uvcvideo | grep "version:"should include realsense string
+sudo apt-
 
 #安装ROS melodic
 参照wiki.ros.org/melodic/Installation/Ubuntu在ubuntu18.04上安装
@@ -44,6 +41,28 @@ export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:home/leo/ORB_SLAM2-master/Examples/R
 cd ORB_SLAM2-master
 chmod +x build_ros.sh
 ./build_ros.sh
+
+#安装usb_cam功能包
+sudo apt-get install ros-kinetic-usb-cam
+任意位置(比如ORB_SLAM2-master下)建立usb_cam_node.launch文件：
+<launch>
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video1" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="io_method" value="mmap" />
+    <remap from="/usb_cam/image_raw" to="/camera/image_raw" />
+  </node>
+</launch>
+
+
+
+
+$ roscd ORB_SLAM1
+$ roslaunch usb_cam_node.launch
+
 
 
 
