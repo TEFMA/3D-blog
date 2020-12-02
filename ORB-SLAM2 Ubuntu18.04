@@ -16,8 +16,15 @@ chmod +x build.sh
 
 
 
+
+
+
+
+
+
+
 ##ROS版本
-D435i SDK安装:
+D435i SDK安装:参考https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md
 sudo apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
 sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo bionic main" -u
 sudo apt-get install librealsense2-dkms
@@ -25,32 +32,8 @@ sudo apt-get install librealsense2-utils
 #测试安装成功
 realsense-viewer
 #安装dev package，With dev package installed, you can compile an application with librealsense using g++ -std=c++11 filename.cpp -lrealsense2 or an IDE of your choice.
-sudo apt-
-
-#安装ROS melodic
-参照wiki.ros.org/melodic/Installation/Ubuntu在ubuntu18.04上安装
-在安装之前添加清华源：sudo sh -c '. /etc/lsb-release && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list'
-
-#编译ORB_SLAM2
-修改ORB_SLAM2-master/Examples/ROS/ORB_SLAM2/CMakeLists.txt，在set(LIBS 后面添加：
-/usr/lib/x86_64-linux-gnu/libboost_system.so
-/usr/lib/x86_64-linux-gnu/libboost_filesystem.so
-添加环境变量到~/.bashrc
-export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:home/leo/ORB_SLAM2-master/Examples/ROS
-编译
-cd ORB_SLAM2-master
-chmod +x build_ros.sh
-./build_ros.sh
-
-#安装usb_cam功能包
-sudo apt-get install ros-melodic-usb-cam
-任意位置(比如ORB_SLAM2-master下)建立usb_cam_node.launch文件：
-<launch>
-  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
-    <param name="video_device" value="/dev/video0" />
-    <param name="image_width" value="640" />
-    <param name="image_height" value="480" />
-    <param name="pixel_format" value="yuyv" />
+sudo apt-get install librealsense2-dev
+sudo apt-get install librealsense2-dbg
     <param name="camera_frame_id" value="usb_cam" />
     <param name="io_method" value="mmap" />
     <remap from="/usb_cam/image_raw" to="/camera/image_raw" />
@@ -58,17 +41,26 @@ sudo apt-get install ros-melodic-usb-cam
 </launch>
 
 
-
-
-
+#运行单目SLAM
+#终端1
 roscore
+#终端2
 cd ORB_SLAM2-master
 roslaunch usb_cam_node.launch
+#终端3
+rosrun ORB_SLAM2 Mono /home/leo/SLAM/src/ORB_SLAM2/Vocabulary/ORBvoc.txt /home/leo/SLAM/src/ORB_SLAM2/Examples/ROS/ORB_SLAM2/Asus.yaml 
+其中需要修改Asus.yaml文件为自己USBcam的内参
 
 
 
 
 
+
+
+
+
+
+########################################################33#3其他
 #ROS建立SLAM工作空间
 mkdir -p ~/SLAM/src
 cd ~/SLAM/src
