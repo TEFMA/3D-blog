@@ -2,7 +2,7 @@
 #orb-slam2需要的依赖我们在《视觉SLAM十四讲》中已经全部安装好
 
 
-#非ROS版本
+##非ROS版本
 cd ORB_SLAM2-master
 chmod +x build.sh
 ./build.sh
@@ -16,7 +16,7 @@ chmod +x build.sh
 
 
 
-#ROS版本
+##ROS版本
 D435i SDK安装:
 sudo apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
 sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo bionic main" -u
@@ -33,6 +33,21 @@ modinfo uvcvideo | grep "version:"should include realsense string
 #安装ROS melodic
 参照wiki.ros.org/melodic/Installation/Ubuntu在ubuntu18.04上安装
 在安装之前添加清华源：sudo sh -c '. /etc/lsb-release && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list'
+
+#编译ORB_SLAM2
+修改ORB_SLAM2-master/Examples/ROS/ORB_SLAM2/CMakeLists.txt，在set(LIBS 后面添加：
+/usr/lib/x86_64-linux-gnu/libboost_system.so
+/usr/lib/x86_64-linux-gnu/libboost_filesystem.so
+添加环境变量到~/.bashrc
+export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:home/leo/ORB_SLAM2-master/Examples/ROS
+编译
+cd ORB_SLAM2-master
+chmod +x build_ros.sh
+./build_ros.sh
+
+
+
+
 #ROS建立SLAM工作空间
 mkdir -p ~/SLAM/src
 cd ~/SLAM/src
