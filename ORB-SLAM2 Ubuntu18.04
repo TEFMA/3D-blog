@@ -34,6 +34,32 @@ realsense-viewer
 #安装dev package，With dev package installed, you can compile an application with librealsense using g++ -std=c++11 filename.cpp -lrealsense2 or an IDE of your choice.
 sudo apt-get install librealsense2-dev
 sudo apt-get install librealsense2-dbg
+
+
+#安装ROS melodic
+参照wiki.ros.org/melodic/Installation/Ubuntu在ubuntu18.04上安装
+在安装之前添加清华源：sudo sh -c '. /etc/lsb-release && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list'
+
+#编译ORB_SLAM2
+修改ORB_SLAM2-master/Examples/ROS/ORB_SLAM2/CMakeLists.txt，在set(LIBS 后面添加：
+/usr/lib/x86_64-linux-gnu/libboost_system.so
+/usr/lib/x86_64-linux-gnu/libboost_filesystem.so
+添加环境变量到~/.bashrc
+export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:home/leo/ORB_SLAM2-master/Examples/ROS
+编译
+cd ORB_SLAM2-master
+chmod +x build_ros.sh
+./build_ros.sh
+
+#安装usb_cam功能包
+sudo apt-get install ros-melodic-usb-cam
+任意位置(比如ORB_SLAM2-master下)建立usb_cam_node.launch文件：
+<launch>
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video0" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
     <param name="camera_frame_id" value="usb_cam" />
     <param name="io_method" value="mmap" />
     <remap from="/usb_cam/image_raw" to="/camera/image_raw" />
@@ -79,8 +105,3 @@ ORB-SLAM2中ROS+RGBD运行实例
 https://blog.csdn.net/qq_38589460/article/details/82708166
 
 https://github.com/raulmur/ORB_SLAM2
-
-
-
-
-
