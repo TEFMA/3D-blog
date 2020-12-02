@@ -1,6 +1,6 @@
 # create linemod dataset using ObjectDatasetTools
-#https://github.com/F2Wang/ObjectDatasetTools
-按照https://github.com/F2Wang/ObjectDatasetTools/blob/master/doc/installation.md在Ubuntu16.04上安装
+https://github.com/F2Wang/ObjectDatasetTools </br>
+按照https://github.com/F2Wang/ObjectDatasetTools/blob/master/doc/installation.md 在Ubuntu16.04上安装
 
 # 采集数据
 ```
@@ -17,7 +17,7 @@ python register_scene.py LINEMOD/jsq
 # option2:分割重建
 ```
 python register_segmented.py LINEMOD/jsq
-``
+```
 # 人工处理，泊松重建
 # 生成label和mask
 1.安装trimesh3.8.15(安装2.x.x会报困扰一下午的错误)
@@ -37,6 +37,8 @@ python inspectMasks.py LINEMOD/jsq
 python makeTrainTestfiles.py LINEMOD/jsq
 ```
 # 获取目标scale(max vertice distance)
+```
+python getmeshscale.py LINEMOD/jsq
 ```
 # 获取bbx label
 ```
