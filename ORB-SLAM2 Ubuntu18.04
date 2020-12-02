@@ -43,11 +43,11 @@ chmod +x build_ros.sh
 ./build_ros.sh
 
 #安装usb_cam功能包
-sudo apt-get install ros-kinetic-usb-cam
+sudo apt-get install ros-melodic-usb-cam
 任意位置(比如ORB_SLAM2-master下)建立usb_cam_node.launch文件：
 <launch>
   <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
-    <param name="video_device" value="/dev/video1" />
+    <param name="video_device" value="/dev/video0" />
     <param name="image_width" value="640" />
     <param name="image_height" value="480" />
     <param name="pixel_format" value="yuyv" />
@@ -60,8 +60,10 @@ sudo apt-get install ros-kinetic-usb-cam
 
 
 
-$ roscd ORB_SLAM1
-$ roslaunch usb_cam_node.launch
+
+roscore
+cd ORB_SLAM2-master
+roslaunch usb_cam_node.launch
 
 
 
