@@ -15,11 +15,11 @@ chmod +x build.sh
 ## 单目示例
 下载https://vision.in.tum.de/data/datasets/rgbd-dataset/download 中TUM数据集中的fr1/desk,解压到与ORB_SLAM2-master同级文件夹下
  ```
-./Examples/Monocular/mono_tum Vocabulary/ORBvov.txt Examples/Monocular/TUM1.yaml ../rgbd_dataset_freiburg1_desk
+./Examples/Monocular/mono_tum Vocabulary/ORBvoc.txt Examples/Monocular/TUM1.yaml ../rgbd_dataset_freiburg1_desk
 ```
 ## RGBD示例
 ```
-./Examples/RGB-D/rgbd_tum Vocabulary/ORBvov.txt Examples/RGB-D/TUM1.yaml ../rgbd_dataset_freiburg1_desk ./Examples/RGB-D/associations/fr1_desk.txt
+./Examples/RGB-D/rgbd_tum Vocabulary/ORBvoc.txt Examples/RGB-D/TUM1.yaml ../rgbd_dataset_freiburg1_desk ./Examples/RGB-D/associations/fr1_desk.txt
 ```
 
 
