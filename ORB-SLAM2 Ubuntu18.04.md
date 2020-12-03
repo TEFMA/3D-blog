@@ -111,39 +111,54 @@ sudo apt-get update
 sudo apt-get upgrade
 ```
 ### 安装realsense-ros
-参考https://github.com/IntelRealSense/realsense-ros 安装即可
-```
-git clone https://github.com/IntelRealSense/realsense-ros.git
-cd realsense-ros/
-git checkout `git tag | sort -V | grep -P "^2.\d+\.\d+" | tail -1`
-cd ..
-```
-```
-catkin_init_workspace
-cd ..
-catkin_make clean
-catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
-catkin_make install
-```
+没有参考https://github.com/IntelRealSense/realsense-ros 安装，而是用apt方法安装：
 ```
 sudo apt install ros-melodic-realsense2-camera
- 
 sudo apt install ros-melodic-realsense2-description
-(1) 发布图片
+```
+**发布图片**
+```
 roslaunch realsense2_camera rs_camera.launch
-(2) 发布点云
+```
+**发布点云**
+```
 roslaunch realsense2_camera rs_camera.launch filters:=pointcloud
-(3) 发布彩色深度图
+```
+**发布彩色深度图**
+```
 roslaunch realsense2_camera rs_camera.launch filters:=colorizer
 ```
-
-
-
+### topic匹配
+查看realsense发布的topic
 ```
-Vocabulary/ORBvoc.txt Examples/RGB-D/TUM1.yaml
+rostopic list
+```
+发现topic为：
+```
+/camera/color/image_raw
+/camera/depth/image_rect_raw
+```
+修改ORB_SLAM2/Examples/ROS/ORB_SLAM2/src/ros_rgbd.cc:
+```
+将其中的/camera/rgb/image_raw替换成/camera/color/image_raw
+将其中的/camera/depth_registered/image_raw替换成/camera/depth/image_rect_raw
 ```
 
+### 运行RGBD SLAM
 
+1.终端1
+```
+roscore
+```
+2.终端2
+```
+roslaunch realsense2_camera rs_camera.launch
+```
+3.终端3
+```
+rosrun ORB_SLAM2 RGBD /home/leo/SLAM/src/ORB_SLAM2/Vocabulary/ORBvoc.txt /home/leo/SLAM/src/ORB_SLAM2/Examples/ROS/ORB_SLAM2/Asus.yaml
+``` 
+其中需要修改Asus.yaml文件为自己USBcam的内参
 
 
 
@@ -154,16 +169,6 @@ Vocabulary/ORBvoc.txt Examples/RGB-D/TUM1.yaml
 
 
 ########################################################33#3其他
-#ROS建立SLAM工作空间
-mkdir -p ~/SLAM/src
-cd ~/SLAM/src
-catkin_init_workspace
-cd ..
-catkin_make
-echo "source ~/SLAM/devel/setup.bash" >> ~/.bashrc
-source ~/.bashrc
-#将ORB_SLAM2-master.zip解压到~/SLAM/src中
-
 【ORB-SLAM2】（三）：单目摄像头+ROS+ORB_SLAM2实时测试
 https://blog.csdn.net/zhuiqiuzhuoyue583/article/details/107394461
 ORB-SLAM2(3) ROS下实时跑ORB_SLAM2
