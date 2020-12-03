@@ -3,7 +3,7 @@ orb-slam2需要的依赖我们在《视觉SLAM十四讲》中已经全部安装�
 # 非ROS版本
 ## 编译ORB_SLAM2
 ```
-cd ORB_SLAM2-master 
+cd /home/leo/ORB_SLAM2 
 chmod +x build.sh   
 ./build.sh          
 ```
@@ -13,7 +13,7 @@ chmod +x build.sh
 ### 遇到c++: internal compiler error: Killed(program cc1plus)
 参考https://github.com/raulmur/ORB_SLAM2/issues/242#issuecomment-276122062 解决，将build.sh中的make -j改成make
 ## 单目示例
-下载https://vision.in.tum.de/data/datasets/rgbd-dataset/download 中TUM数据集中的fr1/desk,解压到与ORB_SLAM2-master同级文件夹下
+下载https://vision.in.tum.de/data/datasets/rgbd-dataset/download 中TUM数据集中的fr1/desk,解压到与/home/leo/ORB_SLAM2同级文件夹下
  ```
 ./Examples/Monocular/mono_tum Vocabulary/ORBvoc.txt Examples/Monocular/TUM1.yaml ../rgbd_dataset_freiburg1_desk
 ```
@@ -33,18 +33,18 @@ chmod +x build.sh
 sudo sh -c '. /etc/lsb-release && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list'
 ```
 ## 编译ORB_SLAM2
-1.修改ORB_SLAM2-master/Examples/ROS/ORB_SLAM2/CMakeLists.txt，在set(LIBS 后面添加：<br/>
+1.修改home/leo/ORB_SLAM2/Examples/ROS/ORB_SLAM2/CMakeLists.txt，在set(LIBS 后面添加：<br/>
 ```
 /usr/lib/x86_64-linux-gnu/libboost_system.so  
 /usr/lib/x86_64-linux-gnu/libboost_filesystem.so  
 ```
 2.添加环境变量到~/.bashrc  <br/>
 ```
-export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:home/leo/ORB_SLAM2-master/Examples/ROS
+export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:home/leo/ORB_SLAM2/Examples/ROS
 ```
 3.编译 <br/>
 ```
-cd ORB_SLAM2-master
+cd home/leo/ORB_SLAM2
 chmod +x build_ros.sh
 ./build_ros.sh
 ```
@@ -54,7 +54,7 @@ chmod +x build_ros.sh
 ```
 sudo apt-get install ros-melodic-usb-cam
 ```
-任意位置(比如ORB_SLAM2-master下)建立usb_cam_node.launch文件： <br/>
+任意位置(比如/home/leo/ORB_SLAM2下)建立usb_cam_node.launch文件： <br/>
 ```
 <launch>
   <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
@@ -75,12 +75,12 @@ roscore
 ```
 2.终端2
 ```
-cd ORB_SLAM2-master
+cd /home/leo/ORB_SLAM2
 roslaunch usb_cam_node.launch
 ```
 3.终端3
 ```
-rosrun ORB_SLAM2 Mono /home/leo/ORB_SLAM2-master/Vocabulary/ORBvoc.txt /home/leo/ORB_SLAM2-master/Examples/ROS/ORB_SLAM2/Asus.yaml
+rosrun ORB_SLAM2 Mono /home/leo/ORB_SLAM2/Vocabulary/ORBvoc.txt /home/leo/ORB_SLAM2/Examples/ROS/ORB_SLAM2/Asus.yaml
 ``` 
 其中需要修改Asus.yaml文件为自己USBcam的内参
 
@@ -135,7 +135,7 @@ rostopic list
 /camera/color/image_raw
 /camera/depth/image_rect_raw
 ```
-修改ORB_SLAM2-master/Examples/ROS/ORB_SLAM2/src/ros_rgbd.cc:
+修改/home/leo/ORB_SLAM2/Examples/ROS/ORB_SLAM2/src/ros_rgbd.cc:
 ```
 将其中的/camera/rgb/image_raw替换成/camera/color/image_raw
 将其中的/camera/depth_registered/image_raw替换成/camera/depth/image_rect_raw
@@ -153,7 +153,7 @@ roslaunch realsense2_camera rs_camera.launch
 ```
 3.终端3
 ```
-rosrun ORB_SLAM2 RGBD /home/leo/ORB_SLAM2-master/Vocabulary/ORBvoc.txt /home/leo/ORB_SLAM2-master/Examples/ROS/ORB_SLAM2/Asus.yaml
+rosrun ORB_SLAM2 RGBD /home/leo/ORB_SLAM2/Vocabulary/ORBvoc.txt /home/leo/ORB_SLAM2/Examples/ROS/ORB_SLAM2/Asus.yaml
 ``` 
 其中需要修改Asus.yaml文件为自己USBcam的内参
 
