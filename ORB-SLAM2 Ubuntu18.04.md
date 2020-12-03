@@ -14,17 +14,6 @@ chmod +x build.sh
 参考https://github.com/raulmur/ORB_SLAM2/issues/242#issuecomment-276122062 解决，将build.sh中的make -j改成make
 ## 单目示例
 下载https://vision.in.tum.de/data/datasets/rgbd-dataset/download 中TUM数据集中的fr1/desk,解压到与ORB_SLAM2-master同级文件夹下
- ```
-./Examples/Monocular/mono_tum Vocabulary/ORBvoc.txt Examples/Monocular/TUM1.yaml ../rgbd_dataset_freiburg1_desk
-```
-## RGBD示例
-```
-./Examples/RGB-D/rgbd_tum Vocabulary/ORBvoc.txt Examples/RGB-D/TUM1.yaml ../rgbd_dataset_freiburg1_desk ./Examples/RGB-D/associations/fr1_desk.txt
-```
-
-
-
-
 
 
 
@@ -130,7 +119,17 @@ catkin_make clean
 catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
 catkin_make install
 ```
-
+```
+sudo apt install ros-melodic-realsense2-camera
+ 
+sudo apt install ros-melodic-realsense2-description
+(1) 发布图片
+roslaunch realsense2_camera rs_camera.launch
+(2) 发布点云
+roslaunch realsense2_camera rs_camera.launch filters:=pointcloud
+(3) 发布彩色深度图
+roslaunch realsense2_camera rs_camera.launch filters:=colorizer
+```
 
 
 
