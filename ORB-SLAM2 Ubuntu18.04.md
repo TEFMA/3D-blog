@@ -110,7 +110,8 @@ realsense-viewer
 sudo apt-get install librealsense2-dev
 sudo apt-get install librealsense2-dbg
 ```
-
+4.安装realsense-ros
+参考https://github.com/IntelRealSense/realsense-ros 安装即可
 
 
 
