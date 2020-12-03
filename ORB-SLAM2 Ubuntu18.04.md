@@ -80,7 +80,7 @@ roslaunch usb_cam_node.launch
 ```
 3.终端3
 ```
-rosrun ORB_SLAM2 Mono /home/leo/SLAM/src/ORB_SLAM2/Vocabulary/ORBvoc.txt /home/leo/SLAM/src/ORB_SLAM2/Examples/ROS/ORB_SLAM2/Asus.yaml
+rosrun ORB_SLAM2 Mono /home/leo/ORB_SLAM2-master/Vocabulary/ORBvoc.txt /home/leo/ORB_SLAM2-master/Examples/ROS/ORB_SLAM2/Asus.yaml
 ``` 
 其中需要修改Asus.yaml文件为自己USBcam的内参
 
@@ -118,14 +118,11 @@ sudo apt install ros-melodic-realsense2-description
 ```
 **发布图片**
 ```
+发布全部图片(这里选用)
 roslaunch realsense2_camera rs_camera.launch
-```
-**发布点云**
-```
+发布点云
 roslaunch realsense2_camera rs_camera.launch filters:=pointcloud
-```
-**发布彩色深度图**
-```
+发布彩色深度图
 roslaunch realsense2_camera rs_camera.launch filters:=colorizer
 ```
 ### topic匹配
@@ -138,7 +135,7 @@ rostopic list
 /camera/color/image_raw
 /camera/depth/image_rect_raw
 ```
-修改ORB_SLAM2/Examples/ROS/ORB_SLAM2/src/ros_rgbd.cc:
+修改ORB_SLAM2-master/Examples/ROS/ORB_SLAM2/src/ros_rgbd.cc:
 ```
 将其中的/camera/rgb/image_raw替换成/camera/color/image_raw
 将其中的/camera/depth_registered/image_raw替换成/camera/depth/image_rect_raw
@@ -156,7 +153,7 @@ roslaunch realsense2_camera rs_camera.launch
 ```
 3.终端3
 ```
-rosrun ORB_SLAM2 RGBD /home/leo/SLAM/src/ORB_SLAM2/Vocabulary/ORBvoc.txt /home/leo/SLAM/src/ORB_SLAM2/Examples/ROS/ORB_SLAM2/Asus.yaml
+rosrun ORB_SLAM2 RGBD /home/leo/ORB_SLAM2-master/Vocabulary/ORBvoc.txt /home/leo/ORB_SLAM2-master/Examples/ROS/ORB_SLAM2/Asus.yaml
 ``` 
 其中需要修改Asus.yaml文件为自己USBcam的内参
 
