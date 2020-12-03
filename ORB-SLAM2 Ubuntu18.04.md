@@ -110,9 +110,26 @@ realsense-viewer
 sudo apt-get install librealsense2-dev
 sudo apt-get install librealsense2-dbg
 ```
-4.安装realsense-ros
+4.更新
+```
+sudo apt-get update
+sudo apt-get upgrade
+```
+### 安装realsense-ros
 参考https://github.com/IntelRealSense/realsense-ros 安装即可
-
+```
+git clone https://github.com/IntelRealSense/realsense-ros.git
+cd realsense-ros/
+git checkout `git tag | sort -V | grep -P "^2.\d+\.\d+" | tail -1`
+cd ..
+```
+```
+catkin_init_workspace
+cd ..
+catkin_make clean
+catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
+catkin_make install
+```
 
 
 
