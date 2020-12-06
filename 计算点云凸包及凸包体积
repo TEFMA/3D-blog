@@ -1,0 +1,68 @@
+#pragma warning(disable:4996)
+#include<iostream>
+#include <pcl/io/io.h>
+#include<pcl/io/ply_io.h>
+#include<pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
+#include <pcl/filters/crop_hull.h>
+#include <pcl/surface/concave_hull.h>
+#include <pcl/visualization/cloud_viewer.h>
+
+
+using namespace std;
+using namespace pcl;
+
+
+int cal_convex_hull()
+{
+	string inputFilename = "object_pointcloud.ply";
+
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+	pcl::io::loadPLYFile<pcl::PointXYZRGB>(inputFilename, *cloud);
+
+	pcl::ConvexHull<pcl::PointXYZRGB> hull;
+	hull.setInputCloud(cloud);
+	hull.setDimension(3);
+	hull.setComputeAreaVolume(true);
+	//polygons保存的是所有凸包多边形的顶点在surface_hull中的坐标
+	vector<pcl::Vertices> polygons;
+	//surface hull是所有凸包的顶点
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr surface_hull(new pcl::PointCloud<pcl::PointXYZRGB>);
+	hull.reconstruct(*surface_hull, polygons);
+
+	double convex_volume = hull.getTotalVolume();
+	cout << "凸包点数："<<surface_hull->size() << endl;
+	cout << "凸包体积：" << convex_volume << endl;
+
+	//创建viewer
+	boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer(new pcl::visualization::PCLVisualizer);
+	viewer->setBackgroundColor(255, 255, 255);
+
+	//画出原始点云
+	//pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZRGB> color_handler(cloud, 255, 255, 0);
+	//viewer->addPointCloud(cloud, color_handler, "sample cloud");
+	//viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 6, "sample cloud");
+
+	//画出凸包点
+	pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZRGB> color_handlerK(surface_hull, 255, 0, 0);
+	viewer->addPointCloud(surface_hull, color_handlerK, "point");
+	viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 6, "point");
+
+	//画出凸包点所构成的mesh
+	viewer->addPolygonMesh<pcl::PointXYZRGB>(surface_hull, polygons, "polyline");
+
+	while (!viewer->wasStopped())
+	{
+		viewer->spinOnce(100);
+	}
+
+	return 0;
+}
+
+
+
+int main()
+{
+  cal_convex_hull();
+  system("pause");
+}
