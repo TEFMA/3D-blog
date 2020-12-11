@@ -1,0 +1,287 @@
+#pragma warning(disable:4996)
+#include <iostream>
+#include <pcl/range_image/range_image.h>
+#include <pcl/io/io.h>
+#include <pcl/io/pcd_io.h>
+#include<pcl/io/ply_io.h>
+#include <pcl/point_types.h>
+#include <pcl/visualization/range_image_visualizer.h>
+#include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/features/range_image_border_extractor.h>
+#include <pcl/console/parse.h>
+#include <pcl/common/file_io.h> // for getFilenameWithoutExtension
+#include <pcl/common/io.h>
+#include <pcl/search/kdtree.h>
+#include <pcl/keypoints/narf_keypoint.h>//NARF关键点
+#include <pcl/keypoints/harris_3d.h>//Harris 3D关键点
+#include <pcl/keypoints/iss_3d.h>//ISS 3D关键点
+#include <pcl/keypoints/sift_keypoint.h>//SIFT 3D关键点
+
+
+
+typedef pcl::PointXYZ PointType;
+
+void keypoint_NARF(pcl::PointCloud<PointType>::Ptr input_point_cloud_ptr);
+void keypoint_harris3D(pcl::PointCloud<PointType>::Ptr input_point_cloud_ptr);
+void keypoint_ISS3D(pcl::PointCloud<PointType>::Ptr input_point_cloud_ptr);
+void keypoint_SIFT3D(pcl::PointCloud<PointType>::Ptr input_point_cloud_ptr);
+
+
+
+int main()
+{
+	//读取点云
+	pcl::PointCloud<PointType>::Ptr cloud(new pcl::PointCloud<PointType>);
+	if (pcl::io::loadPLYFile<PointType>("bunny.ply", *cloud) == -1) {
+		PCL_ERROR("Couldnot read file.\n");
+		system("pause");
+		return(-1);
+	}
+
+	//keypoint_NARF(cloud);
+	//keypoint_harris3D(cloud);
+	//keypoint_ISS3D(cloud);
+	keypoint_SIFT3D(cloud);
+}
+
+
+
+
+
+
+
+
+
+
+//NARF 3D关键点检测
+void keypoint_NARF(pcl::PointCloud<PointType>::Ptr input_point_cloud_ptr)
+{
+	// 3D点云显示
+	pcl::visualization::PCLVisualizer viewer("3D Viewer");//可视化对象
+	viewer.setBackgroundColor(0, 0, 0);
+	viewer.addPointCloud(input_point_cloud_ptr);//指针
+
+
+	//将点云转换为range image
+	//设置转换参数参数
+	float angular_resolution = 0.1f;//0.5f;//角坐标分辨率
+	angular_resolution = pcl::deg2rad(angular_resolution);//角度转换为弧度
+	pcl::RangeImage::CoordinateFrame coordinate_frame = pcl::RangeImage::CAMERA_FRAME;
+	bool setUnseenToMaxRange = false;//是否将所有不可见的点看作最大距离
+	pcl::PointCloud<pcl::PointWithViewpoint> far_ranges;
+	Eigen::Affine3f scene_sensor_pose(Eigen::Affine3f::Identity());
+	float noise_level = 0.0;
+	float min_range = 0.0f;
+	int border_size = 1;
+	//Create RangeImage from the PointCloud
+	pcl::RangeImage::Ptr range_image_ptr(new pcl::RangeImage);
+	pcl::RangeImage& range_image = *range_image_ptr;
+	range_image.createFromPointCloud(*input_point_cloud_ptr, angular_resolution, pcl::deg2rad(360.0f), pcl::deg2rad(180.0f), scene_sensor_pose, coordinate_frame, noise_level, min_range, border_size);
+	range_image.integrateFarRanges(far_ranges);
+	if (setUnseenToMaxRange)
+		range_image.setUnseenToMaxRange();
+
+
+	//Extract NARF keypoints
+	//设置NARF参数
+	float support_size = 0.005f; //感兴趣点的尺寸，用于指示一个点周围圆的半径大小，用于确定该点的兴趣值
+	pcl::RangeImageBorderExtractor range_image_border_extractor;
+	pcl::NarfKeypoint narf_keypoint_detector(&range_image_border_extractor);//定义NARF检测器
+	narf_keypoint_detector.setRangeImage(&range_image);
+	narf_keypoint_detector.getParameters().support_size = support_size;
+	pcl::PointCloud<int> keypoint_indices;
+	narf_keypoint_detector.compute(keypoint_indices);
+	cout << "narf keypoints number:" << keypoint_indices.size() << endl;
+
+
+	//将narf索引值转换为特征点云
+	pcl::PointCloud<PointType>::Ptr keypoints_narf_ptr(new pcl::PointCloud<PointType>);
+	keypoints_narf_ptr->resize(keypoint_indices.size());
+	for (std::size_t i = 0; i < keypoint_indices.size(); ++i)
+		keypoints_narf_ptr->at(i).getVector3fMap() = range_image[keypoint_indices[i]].getVector3fMap();
+
+
+	//在3D图形窗口中显示关键点
+	pcl::visualization::PointCloudColorHandlerCustom<PointType> narf_color_handler(keypoints_narf_ptr, 255, 0, 0);
+	viewer.addPointCloud<PointType>(keypoints_narf_ptr, narf_color_handler, "narf");
+	viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 7, "narf");
+
+	while (!viewer.wasStopped())
+	{
+		viewer.spinOnce();
+		Sleep(0.01);
+	}
+}
+
+
+
+
+
+
+
+
+//harris 3D关键点检测
+void keypoint_harris3D(pcl::PointCloud<PointType>::Ptr input_point_cloud_ptr)
+{
+	// 3D点云显示
+	pcl::visualization::PCLVisualizer viewer("3D Viewer");//可视化对象
+	viewer.setBackgroundColor(0, 0, 0);
+	viewer.addPointCloud(input_point_cloud_ptr);//指针
+
+
+	// 提取Harri关键点
+	pcl::HarrisKeypoint3D<PointType, pcl::PointXYZI, pcl::Normal> harris;//设置harris检测器
+	//设置参数
+	harris.setInputCloud(input_point_cloud_ptr);//设置输入点云 指针
+	harris.setNonMaxSupression(true);
+	harris.setRadius(0.01f);//　块体半径
+	harris.setThreshold(0.001f);//数量阈值
+	//注意Harris的输出点云必须是有强度(I)信息的 pcl::PointXYZI，因为评估值保存在I分量里
+	pcl::PointCloud<pcl::PointXYZI>::Ptr keypoint_harris_ptr(new pcl::PointCloud<pcl::PointXYZI>);//定义输出空间
+	harris.compute(*keypoint_harris_ptr);//计算特征点
+	pcl::PointCloud<PointType>::Ptr keypoint_harris_vis_ptr(new pcl::PointCloud<PointType>);//定义显示空间
+	cout << "harris keypoints number: " << keypoint_harris_ptr->size() << endl;
+
+
+	//可视化结果不支持XYZI格式点云，将XYZI导回XYZ格式
+	PointType point;
+	for (int i = 0; i < keypoint_harris_ptr->size(); i++)
+	{
+		point.x = keypoint_harris_ptr->at(i).x;
+		point.y = keypoint_harris_ptr->at(i).y;
+		point.z = keypoint_harris_ptr->at(i).z;
+		keypoint_harris_vis_ptr->push_back(point);
+	}
+
+
+	//在3D图形窗口中显示关键点
+	pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> harris_color_handler(keypoint_harris_vis_ptr, 255, 0, 0);//第一个参数类型为　指针
+	viewer.addPointCloud(keypoint_harris_vis_ptr, harris_color_handler, "harris");//第一个参数类型为　指针
+	viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 7, "harris");
+
+	while (!viewer.wasStopped())
+	{
+		viewer.spinOnce();
+		Sleep(0.1);
+	}
+}
+
+
+
+
+
+
+
+
+//ISS 3D关键点检测
+void keypoint_ISS3D(pcl::PointCloud<PointType>::Ptr input_point_cloud_ptr)
+{
+	//https://zhuanlan.zhihu.com/p/60806299
+	//https://blog.csdn.net/weixin_41485242/article/details/89434631
+	// 3D点云显示
+	pcl::visualization::PCLVisualizer viewer("3D Viewer");//可视化对象
+	viewer.setBackgroundColor(0, 0, 0);
+	viewer.addPointCloud(input_point_cloud_ptr);//指针
+
+
+	// 提取ISS3D关键点
+	pcl::PointCloud<PointType>::Ptr keypoint_iss_ptr(new pcl::PointCloud<PointType>);//定义iss的输出空间
+	pcl::ISSKeypoint3D<PointType, PointType> iss;//定义iss检测器
+	pcl::search::KdTree<PointType>::Ptr tree_ptr(new pcl::search::KdTree<PointType>);//定义搜索方法
+	//参数设置
+	double model_solution = 0.001;//模型分辨率，参数越小，采取的关键点越少，0.4
+	iss.setSearchMethod(tree_ptr);
+	iss.setSalientRadius(6* model_solution);
+	iss.setNonMaxRadius(4 * model_solution);
+	iss.setThreshold21(0.975);
+	iss.setThreshold32(0.975);
+	iss.setMinNeighbors(5);
+	iss.setNumberOfThreads(16);
+	iss.setInputCloud(input_point_cloud_ptr);
+	iss.compute(*keypoint_iss_ptr);
+	cout << "iss keypoints number: " << keypoint_iss_ptr->size() << endl;
+
+
+	//在3D图形窗口中显示关键点
+	pcl::visualization::PointCloudColorHandlerCustom<PointType> iss_color_handler(keypoint_iss_ptr, 255, 0, 0);//第一个参数类型为　指针
+	viewer.addPointCloud(keypoint_iss_ptr, iss_color_handler, "iss");//第一个参数类型为　指针
+	viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 7, "iss");
+
+	while (!viewer.wasStopped())
+	{
+		viewer.spinOnce();
+		Sleep(0.1);
+	}
+}
+
+
+
+
+
+
+
+//pcl中sift特征需要返回强度信息，改为如下:
+namespace pcl
+{
+	template<>
+	struct SIFTKeypointFieldSelector<PointXYZ>
+	{
+		inline float
+			operator () (const PointXYZ &p) const
+		{
+			return p.z;
+		}
+	};
+}
+//SIFT 3D关键点
+void keypoint_SIFT3D(pcl::PointCloud<PointType>::Ptr input_point_cloud_ptr)
+{
+	// 3D点云显示
+	pcl::visualization::PCLVisualizer viewer("3D Viewer");//可视化对象
+	viewer.setBackgroundColor(0, 0, 0);
+	viewer.addPointCloud(input_point_cloud_ptr);//指针
+	
+
+	//提取SIFT 3D关键点
+	pcl::PointCloud<pcl::PointWithScale>::Ptr keypoint_sift_ptr(new pcl::PointCloud<pcl::PointWithScale>);//定义sift的输出空间
+	pcl::PointCloud<PointType>::Ptr keypoint_sift_vis_ptr(new pcl::PointCloud<PointType>);//定义sift的显示空间
+	pcl::SIFTKeypoint<PointType, pcl::PointWithScale> sift;//定义sift检测器
+	pcl::search::KdTree<PointType>::Ptr tree_ptr(new pcl::search::KdTree<PointType>);//定义搜索方法
+	//参数设置
+	const float min_scale = 0.0001f;//the standard deviation of the smallest scale in the scale space，设置的越小，提取的关键点越多 
+	const int n_octaves = 20;//the number of octaves (i.e. doublings os scale) to compute，//尺度空间层数,小、关键点多
+	const int n_scales_per_octave = 2;//the number of scales to compute within each octave, 设置的越小，提取的关键点越多
+	const float min_contrast = 0.0001f;//the minimum contrast required for detection,根据点云设置大小，越小关键点越多
+	sift.setSearchMethod(tree_ptr);
+	sift.setScales(min_scale, n_octaves, n_scales_per_octave);
+	sift.setMinimumContrast(min_contrast);
+	sift.setInputCloud(input_point_cloud_ptr);
+	sift.compute(*keypoint_sift_ptr);
+	cout << endl << "sift keypoints number: " << keypoint_sift_ptr->size() << endl;
+	
+
+	PointType point;
+	//可视化结果不支持XYZI格式点云，所有又要导回XYZ格式
+	for (int i = 0; i < keypoint_sift_ptr->size(); i++)
+	{
+		point.x = keypoint_sift_ptr->at(i).x;
+		point.y = keypoint_sift_ptr->at(i).y;
+		point.z = keypoint_sift_ptr->at(i).z;
+		keypoint_sift_vis_ptr->push_back(point);
+	}
+
+
+	//在3D图形窗口中显示关键点
+	pcl::visualization::PointCloudColorHandlerCustom<PointType> sift_color_handler(keypoint_sift_vis_ptr, 255, 0, 0);//第一个参数类型为　指针
+	viewer.addPointCloud(keypoint_sift_vis_ptr, sift_color_handler, "sift");//第一个参数类型为　指针
+	viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 7, "sift");
+
+	while (!viewer.wasStopped())
+	{
+		viewer.spinOnce();
+		Sleep(0.1);
+	}
+}
+
+
+
