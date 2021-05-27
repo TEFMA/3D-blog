@@ -22,7 +22,7 @@ make
 sudo cp bin/libANN_char.so /usr/lib/
 
 4.编译CMVS-PMVS
-cd CMVS-PMVS
+cd CMVS-PMVS/program
 mkdir build
 cd build
 cmake ..
