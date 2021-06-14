@@ -20,7 +20,7 @@ sudo apt-get install libglew-dev
 
 4.安装anaconda3
 ```
-./Anaconda3-4.2.0-Linux-x86_64
+bash Anaconda3-4.2.0-Linux-x86_64
 ```
 
 5.安装Pangolin 
