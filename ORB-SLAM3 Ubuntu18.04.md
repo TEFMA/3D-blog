@@ -1,5 +1,16 @@
 # 准备
-orb-slam2需要的依赖我们在《视觉SLAM十四讲》中已经全部安装好
+orb-slam3需要的依赖我们在《视觉SLAM十四讲》中已经全部安装好
+需要注意的是将opencv3.1升级为了opencv4.0，具体安装步骤如下：
+
+```
+cd opencv-4.0.0
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
+
 # 非ROS版本
 ## 编译ORB_SLAM2
 ```
