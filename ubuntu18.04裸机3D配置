@@ -34,7 +34,7 @@ make
 sudo make install
 
 7.安装opencv3.1.0
-sudo apt-get install build-essential libgtk2.0-dev libvtk6-dev libjpeg-dev libtiff5-dev libjasper-dev libopenexr libtbb-dev
+sudo apt-get install build-essential libgtk2.0-dev libvtk6-dev libjpeg-dev libtiff5-dev libjasper-dev libopenexr-dev libtbb-dev
 cd opencv-3.1.0
 mkdir build
 cd build
