@@ -16,7 +16,7 @@ sudo apt-get install libglew-dev
 ./Anaconda3-4.2.0-Linux-x86_64
 
 5.安装Pangolin 
-依赖
+git clone https://github.com/stevenlovegrove/Pangolin.git
 cd Pangolin
 mkdir build
 cd build
