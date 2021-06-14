@@ -67,6 +67,16 @@ cmake ..
 make
 sudo make install
 ```
+添加依赖时遇到问题：
+E：无法定位软件包 libjasper-dev
+解决办法参操：https://blog.csdn.net/qq_44830040/article/details/105961295
+依次执行以下命令即可解决：
+```
+sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
+sudo apt update
+sudo apt install libjasper1 libjasper-dev
+```
+
 
 8.安装Ceres
 ```
