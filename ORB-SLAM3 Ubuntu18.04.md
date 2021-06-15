@@ -1,6 +1,6 @@
 # 准备
 orb-slam3需要的依赖我们在《视觉SLAM十四讲》中已经全部安装好
-需要注意的是将opencv3.1升级为了opencv4.0，具体安装步骤如下：
+1.需要注意的是将opencv3.1升级为了opencv4.0，具体安装步骤如下：
 
 ```
 cd opencv-4.0.0
@@ -10,19 +10,48 @@ cmake ..
 make
 sudo make install
 ```
+2.用ORB-SLAM3/Thirdparty/中带的g2o和DBoW2编译成功后无法通过sudo make install安装。
+虽然ORB-SLAM3作者声明他提供的g2o和DBoW2是修改的版本，但是没办法，目前只能用原装版本：
+```
+git clone https://github.com/dorian3d/DBoW2.git DBoW2
+cd DBoW2
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
+```
+git clone https://github.com/RainerKuemmerle/g2o.git g2o
+cd g2o
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
 
 # 非ROS版本
-## 编译ORB_SLAM2
+## 编译ORB_SLAM3
 ```
-cd /home/leo/ORB_SLAM2 
+cd ORB_SLAM3
 chmod +x build.sh   
 ./build.sh          
 ```
 ## 问题解决
-### 遇到usleep的问题
-参考https://github.com/raulmur/ORB_SLAM2/issues/337#issuecomment-373945348 解决，即在/include/System.h文件中添加头文件<unistd.h>即可
-### 遇到c++: internal compiler error: Killed(program cc1plus)
-参考https://github.com/raulmur/ORB_SLAM2/issues/242#issuecomment-276122062 解决，将build.sh中的make -j改成make -j2
+### 遇到 error: no match for ‘operator/’ (operand types are ‘cv::Matx<float, 3, 1>’ and ‘float’) x3D = x3D_h.get_minor<3,1>(0,0) / x3D_h(3); 问题
+参考https://blog.csdn.net/Mwithz/article/details/117222990 解决，即在src/localMapping.cc和src/CameraModels/KannalaBrandt8.cpp中将
+```
+x3D = x3D_h.get_minor<3,1>(0,0) / x3D_h(3);
+```
+换成
+```
+x3D = cv::Matx31f(x3D_h.get_minor<3,1>(0,0)(0) / x3D_h(3), x3D_h.get_minor<3,1>(0,0)(1) / x3D_h(3), x3D_h.get_minor<3,1>(0,0)(2) / x3D_h(3));
+```
+即可
+
+
+
 ## 单目示例
 下载https://vision.in.tum.de/data/datasets/rgbd-dataset/download 中TUM数据集中的fr1/desk,解压到/home/leo/ORB_SLAM2文件夹下
  ```
