@@ -10,26 +10,8 @@ cmake ..
 make
 sudo make install
 ```
-2.用ORB-SLAM3/Thirdparty/中带的g2o和DBoW2编译成功后无法通过sudo make install安装。
-虽然ORB-SLAM3作者声明他提供的g2o和DBoW2是修改的版本，但是没办法，目前只能用原装版本：
-```
-git clone https://github.com/dorian3d/DBoW2.git DBoW2
-cd DBoW2
-mkdir build
-cd build
-cmake ..
-make
-sudo make install
-```
-```
-git clone https://github.com/RainerKuemmerle/g2o.git g2o
-cd g2o
-mkdir build
-cd build
-cmake ..
-make
-sudo make install
-```
+2.用ORB-SLAM3/Thirdparty/中自带的g2o和DBoW2无需单独编译安装，在编译ORB-SLAM3时会统一编译
+
 
 # 非ROS版本
 ## 编译ORB_SLAM3
