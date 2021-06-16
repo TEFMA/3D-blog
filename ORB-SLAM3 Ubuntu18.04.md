@@ -129,6 +129,11 @@ rosrun ORB_SLAM3 Mono /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/s
 ``` 
 其中需要修改Asus.yaml文件为自己USBcam的内参
 
+遇到问题
+执行终端3时，报错Segmentation fault (core dumped)
+原因是ros中的opencv和ros外的opencv(opencv 4.0)版本冲突
+解决办法，修改/home/slam/Desktop/ORB_SLAM3/Examples/ROS/ORB_SLAM3/CMakeLists.txt中find_package(OpenCV 3.0 QUIET)为find_package(OpenCV 4.0 QUIET)即可
+再重新./build_ros.sh编译ROS版本的ORB_SLAM3
 
 
 
