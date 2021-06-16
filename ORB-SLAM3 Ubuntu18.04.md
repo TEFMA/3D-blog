@@ -66,6 +66,19 @@ x3D = cv::Matx31f(x3D_h.get_minor<3,1>(0,0)(0) / x3D_h(3), x3D_h.get_minor<3,1>(
 ```
 sudo sh -c '. /etc/lsb-release && echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list'
 ```
+这次装ROS异常艰辛，主要卡在rosdep init(多试几遍一般都可通过)和rosdep update(最难的)上，最后解决rosdep update办法如下：
+参考https://blog.csdn.net/leida_wt/article/details/115120940
+1.修改位于/usr/lib/python2.7/dist-packages/rosdep2/sources_list.py的文件中的download_rosdep_data函数，在try后第一个if前添加如下内容：
+```
+url="https://ghproxy.com/"+url
+```
+2.用同样的方法修改/usr/lib/python2.7/dist-packages/rosdistro/__init__.py里面的DEFAULT_INDEX_URL,即将DEFAULT_INDEX_URL 进行如下替换：
+```
+DEFAULT_INDEX_URL = 'https://ghproxy.com/https://raw.githubusercontent.com/ros/rosdistro/master/index-v4.yaml'
+```
+修改完可能会卡在第4个hit上，此时多执行畸变rosdep update就可以了。
+
+
 ## 编译ORB_SLAM2
 1.修改home/leo/ORB_SLAM2/Examples/ROS/ORB_SLAM2/CMakeLists.txt，在set(LIBS 后面添加：<br/>
 ```
