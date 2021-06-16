@@ -46,6 +46,9 @@ x3D = cv::Matx31f(x3D_h.get_minor<3,1>(0,0)(0) / x3D_h(3), x3D_h.get_minor<3,1>(
 ./euroc_examples.sh
 ```
 
+
+
+
 ## 单目示例
 下载https://vision.in.tum.de/data/datasets/rgbd-dataset/download 中TUM数据集中的fr1/desk,解压到/home/leo/ORB_SLAM2文件夹下
  ```
@@ -79,19 +82,14 @@ DEFAULT_INDEX_URL = 'https://ghproxy.com/https://raw.githubusercontent.com/ros/r
 修改完可能会卡在第4个hit上，此时多执行畸变rosdep update就可以了。
 
 
-## 编译ORB_SLAM2
-1.修改home/leo/ORB_SLAM2/Examples/ROS/ORB_SLAM2/CMakeLists.txt，在set(LIBS 后面添加：<br/>
+## 编译ORB_SLAM3
+1.添加环境变量到~/.bashrc  <br/>
 ```
-/usr/lib/x86_64-linux-gnu/libboost_system.so  
-/usr/lib/x86_64-linux-gnu/libboost_filesystem.so  
-```
-2.添加环境变量到~/.bashrc  <br/>
-```
-export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:home/leo/ORB_SLAM2/Examples/ROS
+export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:home/slam/Desktop/ORB_SLAM3/Examples/ROS
 ```
 3.编译 <br/>
 ```
-cd home/leo/ORB_SLAM2
+cd home/slam/Desktop/ORB_SLAM3
 chmod +x build_ros.sh
 ./build_ros.sh
 ```
@@ -101,7 +99,7 @@ chmod +x build_ros.sh
 ```
 sudo apt-get install ros-melodic-usb-cam
 ```
-任意位置(比如/home/leo/ORB_SLAM2下)建立usb_cam_node.launch文件： <br/>
+任意位置(比如/home/slam/Desktop/ORB_SLAM3下)建立usb_cam_node.launch文件： <br/>
 ```
 <launch>
   <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
@@ -122,12 +120,12 @@ roscore
 ```
 2.终端2
 ```
-cd /home/leo/ORB_SLAM2
+cd /home/slam/Desktop/ORB_SLAM3
 roslaunch usb_cam_node.launch
 ```
 3.终端3
 ```
-rosrun ORB_SLAM2 Mono /home/leo/ORB_SLAM2/Vocabulary/ORBvoc.txt /home/leo/ORB_SLAM2/Examples/ROS/ORB_SLAM2/Asus.yaml
+rosrun ORB_SLAM3 Mono /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/slam/Desktop/ORB_SLAM3/Examples/ROS/ORB_SLAM3/Asus.yaml
 ``` 
 其中需要修改Asus.yaml文件为自己USBcam的内参
 
@@ -182,7 +180,7 @@ rostopic list
 /camera/color/image_raw
 /camera/depth/image_rect_raw
 ```
-修改/home/leo/ORB_SLAM2/Examples/ROS/ORB_SLAM2/src/ros_rgbd.cc:
+修改/home/slam/Desktop/ORB_SLAM3/Examples/ROS/ORB_SLAM3/src/ros_rgbd.cc:
 ```
 将其中的/camera/rgb/image_raw替换成/camera/color/image_raw
 将其中的/camera/depth_registered/image_raw替换成/camera/depth/image_rect_raw
@@ -200,7 +198,7 @@ roslaunch realsense2_camera rs_camera.launch
 ```
 3.终端3
 ```
-rosrun ORB_SLAM2 RGBD /home/leo/ORB_SLAM2/Vocabulary/ORBvoc.txt /home/leo/ORB_SLAM2/Examples/ROS/ORB_SLAM2/Asus.yaml
+rosrun ORB_SLAM3 RGBD /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/slam/Desktop/ORB_SLAM3/Examples/ROS/ORB_SLAM3/Asus.yaml
 ``` 
 其中需要修改Asus.yaml文件为自己USBcam的内参
 
