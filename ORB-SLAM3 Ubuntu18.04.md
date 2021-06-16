@@ -1,5 +1,6 @@
 # 准备
 orb-slam3需要的依赖我们在《视觉SLAM十四讲》中已经全部安装好
+
 1.需要注意的是将opencv3.1升级为了opencv4.0，具体安装步骤如下：
 
 ```
@@ -11,6 +12,10 @@ make
 sudo make install
 ```
 2.用ORB-SLAM3/Thirdparty/中自带的g2o和DBoW2无需单独编译安装，在编译ORB-SLAM3时会统一编译
+3.不需要ananconda的python，需要python2.7版本
+```
+sudo apt install libpython2.7-dev
+```
 
 
 # 非ROS版本
