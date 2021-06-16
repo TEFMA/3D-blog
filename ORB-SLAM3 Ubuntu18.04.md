@@ -43,7 +43,7 @@ x3D = cv::Matx31f(x3D_h.get_minor<3,1>(0,0)(0) / x3D_h(3), x3D_h.get_minor<3,1>(
 打开脚本"euroc_examples.sh",修改pathDatasetEuroc使其指向解压后的数据文件
 执行该脚本
 ```
-./euroc_examples
+./euroc_examples.sh
 ```
 
 ## 单目示例
