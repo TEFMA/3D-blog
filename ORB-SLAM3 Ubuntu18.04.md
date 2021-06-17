@@ -258,13 +258,16 @@ rosrun ORB_SLAM3 RGBD /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/s
 
 ### ROS主从机协同
 主机（server）运行roscore,负责执行slam运算；从机（robot）负责采集传感器的图片信息。需要将从机采集到的图片流发送给主机，ROS提供了非常方便的发布订阅机制解决这个问题：
+
 协同配置：
+
 1.需要知道的信息：
 主机hostname: server
 从机hostname: robot
 主机IP：192.168.1.100
 从机IP：192.168.1.102
 (主从机必须在同一个局域网内)
+
 2.配置主机
 (1)修改.bashrc文件
 ```
