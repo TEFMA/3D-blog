@@ -274,6 +274,7 @@ rosrun ORB_SLAM3 RGBD /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/s
 (主从机必须在同一个局域网内)
 
 2.配置主机
+
 (1)修改.bashrc文件
 ```
 sudo gedit ~/.bashrc
@@ -293,6 +294,7 @@ sudo gedit /etc/hosts
 ```
 
 3.配置从机
+
 (1)修改.bashrc文件
 ```
 sudo gedit ~/.bashrc
@@ -311,6 +313,7 @@ sudo gedit /etc/hosts
 192.168.1.100 server
 ```
 3.协同
+
 (1)主机运行roscore
 ```
 roscore
