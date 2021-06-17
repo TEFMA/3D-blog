@@ -262,10 +262,15 @@ rosrun ORB_SLAM3 RGBD /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/s
 协同配置：
 
 1.需要知道的信息：
+
 主机hostname: server
+
 从机hostname: robot
+
 主机IP：192.168.1.100
+
 从机IP：192.168.1.102
+
 (主从机必须在同一个局域网内)
 
 2.配置主机
