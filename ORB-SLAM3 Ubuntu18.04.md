@@ -135,6 +135,52 @@ rosrun ORB_SLAM3 Mono /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/s
 解决办法，修改/home/slam/Desktop/ORB_SLAM3/Examples/ROS/ORB_SLAM3/CMakeLists.txt中find_package(OpenCV 3.0 QUIET)为find_package(OpenCV 4.0 QUIET)即可
 再重新./build_ros.sh编译ROS版本的ORB_SLAM3
 
+## USB camera 双目
+### 安装usb_cam功能包
+```
+sudo apt-get install ros-melodic-usb-cam
+```
+任意位置(比如/home/slam/Desktop/ORB_SLAM3下)建立usb_stereo_cam_node.launch文件： <br/>
+```
+<launch>
+  <node name="usb_cam0" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video0" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="io_method" value="mmap" />
+    <remap from="/usb_cam0/image_raw" to="/camera/right/image_raw" />
+  </node>
+  <node name="usb_cam1" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video2" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="io_method" value="mmap" />
+    <remap from="/usb_cam1/image_raw" to="/camera/left/image_raw" />
+  </node>
+</launch>
+```
+
+### 运行双目SLAM
+1.终端1
+```
+roscore
+```
+2.终端2
+```
+cd /home/slam/Desktop/ORB_SLAM3
+roslaunch usb_stereo_cam_node.launch
+```
+3.终端3
+```
+rosrun ORB_SLAM3 Stereo /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/slam/Desktop/ORB_SLAM3/Examples/Stereo/EuRoC.yaml 0
+``` 
+其中需要修改EuRoC.yaml文件为自己USBcam的内参
+
+
 
 
 ## RGBD(realsense D435i)相机
@@ -210,8 +256,65 @@ rosrun ORB_SLAM3 RGBD /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/s
 
 
 
+### ROS主从机协同
+主机（server）运行roscore,负责执行slam运算；从机（robot）负责采集传感器的图片信息。需要将从机采集到的图片流发送给主机，ROS提供了非常方便的发布订阅机制解决这个问题：
+协同配置：
+1.需要知道的信息：
+主机hostname: server
+从机hostname: robot
+主机IP：192.168.1.100
+从机IP：192.168.1.102
+(主从机必须在同一个局域网内)
+2.配置主机
+(1)修改.bashrc文件
+```
+sudo gedit ~/.bashrc
+```
+在最后加入
+```
+ROS_MASTER_URI=http://192.168.1.100:11311
+ROS_IP=http://192.168.1.100
+```
+(2)修改hosts文件
+```
+sudo gedit /etc/hosts
+```
+在其中加入
+```
+192.168.1.102 robot
+```
 
-
+3.配置从机
+(1)修改.bashrc文件
+```
+sudo gedit ~/.bashrc
+```
+在最后加入
+```
+ROS_MASTER_URI=http://192.168.1.100:11311
+ROS_IP=http://192.168.1.102
+```
+(2)修改hosts文件
+```
+sudo gedit /etc/hosts
+```
+在其中加入
+```
+192.168.1.100 server
+```
+3.协同
+(1)主机运行roscore
+```
+roscore
+```
+(2)从机发布视频流
+```
+roslaunch usb_cam_node_launch.launch
+```
+(3)主机运行SLAM
+```
+rosrun ORB_SLAM3 Mono /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/slam/Desktop/ORB_SLAM3/Examples/ROS/ORB_SLAM3/Asus.yaml
+```
 
 
 
