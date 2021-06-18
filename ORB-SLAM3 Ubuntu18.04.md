@@ -180,8 +180,8 @@ rosrun ORB_SLAM3 Stereo /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home
 ``` 
 其中需要修改EuRoC.yaml文件为自己USBcam的内参
 
-
-
+### 双目相机标定挤修改EuRoC.yaml的方法
+参考：https://blog.csdn.net/weixin_37918890/article/details/95626004
 
 ## RGBD(realsense D435i)相机
 ### D435i SDK安装
