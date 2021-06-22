@@ -85,11 +85,11 @@ DEFAULT_INDEX_URL = 'https://ghproxy.com/https://raw.githubusercontent.com/ros/r
 ## 编译ORB_SLAM3
 1.添加环境变量到~/.bashrc  <br/>
 ```
-export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:home/slam/Desktop/ORB_SLAM3/Examples/ROS
+export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:home/slam/Desktop/ORB_SLAM3/ORB_SLAM3/Examples/ROS
 ```
 3.编译 <br/>
 ```
-cd home/slam/Desktop/ORB_SLAM3
+cd home/slam/Desktop/ORB_SLAM3/ORB_SLAM3
 chmod +x build_ros.sh
 ./build_ros.sh
 ```
@@ -120,19 +120,19 @@ roscore
 ```
 2.终端2
 ```
-cd /home/slam/Desktop/ORB_SLAM3
+cd /home/slam/Desktop/ORB_SLAM3/ORB_SLAM3
 roslaunch usb_cam_node.launch
 ```
 3.终端3
 ```
-rosrun ORB_SLAM3 Mono /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/slam/Desktop/ORB_SLAM3/Examples/ROS/ORB_SLAM3/Asus.yaml
+rosrun ORB_SLAM3 Mono /home/slam/Desktop/ORB_SLAM3/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/slam/Desktop/ORB_SLAM3/ORB_SLAM3/Examples/ROS/ORB_SLAM3/Asus.yaml
 ``` 
 其中需要修改Asus.yaml文件为自己USBcam的内参
 
 遇到问题
 执行终端3时，报错Segmentation fault (core dumped)
 原因是ros中的opencv和ros外的opencv(opencv 4.0)版本冲突
-解决办法，修改/home/slam/Desktop/ORB_SLAM3/Examples/ROS/ORB_SLAM3/CMakeLists.txt中find_package(OpenCV 3.0 QUIET)为find_package(OpenCV 4.0 QUIET)即可
+解决办法，修改/home/slam/Desktop/ORB_SLAM3/ORB_SLAM3/Examples/ROS/ORB_SLAM3/CMakeLists.txt中find_package(OpenCV 3.0 QUIET)为find_package(OpenCV 4.0 QUIET)即可
 再重新./build_ros.sh编译ROS版本的ORB_SLAM3
 
 ## USB camera 双目
@@ -171,12 +171,12 @@ roscore
 ```
 2.终端2
 ```
-cd /home/slam/Desktop/ORB_SLAM3
+cd /home/slam/Desktop/ORB_SLAM3/ORB_SLAM3
 roslaunch usb_stereo_cam_node.launch
 ```
 3.终端3
 ```
-rosrun ORB_SLAM3 Stereo /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/slam/Desktop/ORB_SLAM3/Examples/Stereo/EuRoC.yaml 0
+rosrun ORB_SLAM3 Stereo /home/slam/Desktop/ORB_SLAM3/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/slam/Desktop/ORB_SLAM3/ORB_SLAM3/Examples/Stereo/EuRoC.yaml 0
 ``` 
 其中需要修改EuRoC.yaml文件为自己USBcam的内参
 
@@ -249,7 +249,7 @@ roslaunch realsense2_camera rs_camera.launch
 ```
 3.终端3
 ```
-rosrun ORB_SLAM3 RGBD /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/slam/Desktop/ORB_SLAM3/Examples/ROS/ORB_SLAM3/Asus.yaml
+rosrun ORB_SLAM3 RGBD /home/slam/Desktop/ORB_SLAM3/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/slam/Desktop/ORB_SLAM3/ORB_SLAM3/Examples/ROS/ORB_SLAM3/Asus.yaml
 ``` 
 其中需要修改Asus.yaml文件为自己USBcam的内参
 
@@ -324,7 +324,7 @@ roslaunch usb_cam_node_launch.launch
 ```
 (3)主机运行SLAM
 ```
-rosrun ORB_SLAM3 Mono /home/slam/Desktop/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/slam/Desktop/ORB_SLAM3/Examples/ROS/ORB_SLAM3/Asus.yaml
+rosrun ORB_SLAM3 Mono /home/slam/Desktop/ORB_SLAM3/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/slam/Desktop/ORB_SLAM3/Examples/ROS/ORB_SLAM3/ORB_SLAM3/Asus.yaml
 ```
 
 
