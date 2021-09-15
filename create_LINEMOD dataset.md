@@ -2,6 +2,9 @@
 https://github.com/F2Wang/ObjectDatasetTools </br>
 按照https://github.com/F2Wang/ObjectDatasetTools/blob/master/doc/installation.md 在Ubuntu16.04上安装
 
+## 0.打印并粘贴markers
+markers链接：https://github.com/TEFMA/3D-blog/blob/master/markers.pdf
+
 ## 1.采集数据
 ```
 python record2.py LINEMOD/jsq
