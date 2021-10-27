@@ -1,4 +1,4 @@
-# 后续本文件不再更新，以https://github.com/TEFMA/ORB-SLAM3/blob/master/README.md为准
+# 后续本文件不再更新，以https://github.com/TEFMA/ORB-SLAM3/blob/master/README.md 为准
 
 # 准备
 orb-slam3需要的依赖我们在《视觉SLAM十四讲》中已经全部安装好
