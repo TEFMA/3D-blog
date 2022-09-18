@@ -182,6 +182,13 @@ rosrun ORB_SLAM3 Stereo /home/slam/Desktop/ORB_SLAM3/ORB_SLAM3/Vocabulary/ORBvoc
 ``` 
 其中需要修改EuRoC.yaml文件为自己USBcam的内参
 
+4.终端4 (optional)
+```
+rosrun image_transport republish compressed in:=/camera/left raw out:=/camera/left/image_raw
+```
+当用rostopic list发现传输的图像格式是compressed(topic为 /camera/left/compressed)的时候需要上述命令转换成raw的格式。
+
+
 ### 双目相机标定挤修改EuRoC.yaml的方法
 参考：https://blog.csdn.net/weixin_37918890/article/details/95626004
 
